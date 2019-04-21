@@ -1,0 +1,7 @@
+<h1>Messages</h1>
+
+<% @messages.each do |message| %>
+  <h3><%= message.subject%></h3>
+  <p><%= message.body %>
+  <hr />
+<% end %>

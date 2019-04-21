@@ -15,10 +15,35 @@ services:
     build:
       context: ex_message_bus/
       dockerfile: Dockerfile
-    command: "tail -f /bin/sh"
+    command: "tail -f /dev/null"
     links:
       - redis
     environment:
       REDIS_HOST: redis
     volumes:
       - ./ex_message_bus:/mnt/code
+
+  rails:
+    build:
+      context: mini-sledge
+      dockerfile: Dockerfile
+    links:
+      - redis
+    environment:
+      REDIS_HOST: redis
+    volumes:
+      - ./mini-sledge:/mnt/code
+    ports:
+      - "3000:3000"
+
+  ruby-processor:
+    build:
+      context: mini-sledge
+      dockerfile: Dockerfile
+    command: "rake sledge_listener:start"
+    links:
+      - redis
+    environment:
+      REDIS_HOST: redis
+    volumes:
+      - ./mini-sledge:/mnt/code
